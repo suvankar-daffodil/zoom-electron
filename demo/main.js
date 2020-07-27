@@ -64,7 +64,7 @@ let hasRDLicense;
 let autoCloseYUV = false;
 let hasLogin = false;
 
-function sdkauthCB(status, joinWithoutLogin) {
+function sdkauthCB(status, joinURL) {
   if (ZoomAuthResult.AUTHRET_SUCCESS == status) {
     hasRDLicense = hasRawDataLicense();
     global.hasRDLicense = hasRDLicense;
@@ -114,10 +114,8 @@ function sdkauthCB(status, joinWithoutLogin) {
     zoomsms = zoomsdk.SMSHelper();
     zoomdirectshare = zoomauth.GetDirectShare();
 
-    joinWithoutLogin
-      ? zoommeeting.HandleZoomWebUriProtocolAction(
-          'https://us02web.zoom.us/j/87185077205?pwd=aHEzSlVHbUNvZEF0SmwzUHFmYjRGUT09'
-        )
+    joinURL
+      ? zoommeeting.HandleZoomWebUriProtocolAction(joinURL)
       : showLoginWindow();
   } else {
     showAuthwindow();
@@ -2873,16 +2871,17 @@ function initMeeting() {
 
   if (ZoomSDKError.SDKERR_SUCCESS == ret) {
     const options = {
-      authcb: (status) => sdkauthCB(status, true),
+      authcb: (status) =>
+        sdkauthCB(
+          status,
+          'https://us02web.zoom.us/j/87185077205?pwd=aHEzSlVHbUNvZEF0SmwzUHFmYjRGUT09'
+        ),
       logincb: loginretCB,
       logoutcb: null,
     };
     zoomauth = zoomsdk.GetAuth(options);
     const ret = zoomauth.AuthWithJwtToken(getJWT());
     console.log('AuthWithJwtToken', ret);
-    // if (ret == 0) {
-    //   showWaitingWindow();
-    // }
   }
 }
 
