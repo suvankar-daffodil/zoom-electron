@@ -176,11 +176,12 @@ function meetingstatuscb(status, result) {
       break;
     case ZoomMeetingStatus.MEETING_STATUS_FAILED:
     case ZoomMeetingStatus.MEETING_STATUS_ENDED:
-      if (hasLogin) {
-        showStartJoinWindow();
-      } else {
-        showLoginWindow();
-      }
+      app.quit();
+      // if (hasLogin) {
+      //   showStartJoinWindow();
+      // } else {
+      //   showLoginWindow();
+      // }
       break;
     default:
       break;
@@ -2854,6 +2855,9 @@ function getJWT() {
 }
 
 function initMeeting() {
+  const MEETING_URL =
+    'https://us02web.zoom.us/j/87185077205?pwd=aHEzSlVHbUNvZEF0SmwzUHFmYjRGUT09';
+
   const opts = {
     path: '',
     domain: 'https://www.zoom.us',
@@ -2871,11 +2875,7 @@ function initMeeting() {
 
   if (ZoomSDKError.SDKERR_SUCCESS == ret) {
     const options = {
-      authcb: (status) =>
-        sdkauthCB(
-          status,
-          'https://us02web.zoom.us/j/87185077205?pwd=aHEzSlVHbUNvZEF0SmwzUHFmYjRGUT09'
-        ),
+      authcb: (status) => sdkauthCB(status, MEETING_URL),
       logincb: loginretCB,
       logoutcb: null,
     };
